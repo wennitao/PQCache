@@ -337,6 +337,7 @@ class GPUCacheManager:
                             .scatter_(-2, hit_scatter_index.unsqueeze(-1).expand_as(selected_global_value), selected_global_value)
             
             fetched_token_cnt = to_fetch_idx[1].numel()
+            print (fetched_token_cnt, to_fetch_idx)
             self.fetch_k_pin_buffer[layer_idx][:fetched_token_cnt,:] = self.cpu_key_buffers[layer_idx][(0, to_fetch_idx[1], to_fetch_idx[0])]
             self.fetch_v_pin_buffer[layer_idx][:fetched_token_cnt,:] = self.cpu_value_buffer[layer_idx][(0, to_fetch_idx[1], to_fetch_idx[0])]
 

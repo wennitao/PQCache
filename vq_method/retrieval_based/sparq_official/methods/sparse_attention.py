@@ -19,6 +19,7 @@ from torch import Tensor
 from transformers.models.gpt_neox.modeling_gpt_neox import (
     GPTNeoXAttention,
     GPTNeoXModel,
+    # eager_attention_forward
 )
 
 _softmax = F.softmax
@@ -224,6 +225,7 @@ def number_attention_layers(model: GPTNeoXModel) -> Iterator[GPTNeoXModel]:
 
 
 original_attn = GPTNeoXAttention._attn
+# original_attn = eager_attention_forward
 
 
 def sparse_attn(

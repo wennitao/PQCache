@@ -31,7 +31,7 @@ def initialize_objects(config, model):
     global global_compressor
     global cache_managers
     global total_layer_num, pp_size, layer_per_rank
-    
+
     global H2DStream
     H2DStream = torch.cuda.Stream()
     

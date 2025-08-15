@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 4.0)
 aux_source_directory(src CACHE_SRC_LIST)
 
+set(CMAKE_PREFIX_PATH "/mnt/conda/w2ni/miniconda3/envs/pqcache/lib/python3.10/site-packages/")
+
 find_package(pybind11 2.6.0 CONFIG)
 
 if (NOT pybind11_FOUND)

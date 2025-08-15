@@ -99,17 +99,18 @@ def compute_kmeans_worker(
 ):  
     cpu_num = mp.cpu_count()
     cur_pid = os.getpid()
-    if n_core >= 1:
-        cpu_use = int(n_core)
-        if idx == -1:
-            os.sched_setaffinity(cur_pid, list(range(cpu_num))[-2:-1])
-        else:
-            os.sched_setaffinity(cur_pid, list(range(cpu_num))[core_offset + cpu_use * (idx+1) : core_offset + cpu_use * (idx+2)])
-    else:
-        assert int(n_core * task_cnt) == 1, f"{n_core},{task_cnt}"
-        cpu_use = 1
-        core_idx = math.floor(n_core*idx)
-        os.sched_setaffinity(cur_pid, list(range(cpu_num))[core_idx:core_idx + 1])
+    # print (f"Worker {idx} pid is {cur_pid}, cpu num is {cpu_num}, n_core is {n_core}, core_offset is {core_offset}, task_cnt is {task_cnt}")
+    # if n_core >= 1:
+    #     cpu_use = int(n_core)
+    #     if idx == -1:
+    #         os.sched_setaffinity(cur_pid, list(range(cpu_num))[-2:-1])
+    #     else:
+    #         os.sched_setaffinity(cur_pid, list(range(cpu_num))[core_offset + cpu_use * (idx+1) : core_offset + cpu_use * (idx+2)])
+    # else:
+    #     assert int(n_core * task_cnt) == 1, f"{n_core},{task_cnt}"
+    #     cpu_use = 1
+    #     core_idx = math.floor(n_core*idx)
+    #     os.sched_setaffinity(cur_pid, list(range(cpu_num))[core_idx:core_idx + 1])
 
     # NOTE: It is necessary to not patch sklearn before setting CPU affinity.
     # There are some environments in which doing patch earlier will fail CPU affinity setting.

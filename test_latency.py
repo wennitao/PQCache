@@ -1,5 +1,5 @@
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 import time
 import numpy as np
 from vq_method.retrieval_based.pq_search import initialize_objects, del_objects, wait
@@ -19,7 +19,8 @@ SYNC_TEST_TIME = eval(os.environ.get("SYNC_TEST_TIME","0"))
 # NOTE: We use Llama2-7b to benchmark the latency.
 
 def main():
-    model_path = "./pqcache/mistral-7b-Instruct-32k"
+    # model_path = "./pqcache/mistral-7b-Instruct-32k"
+    model_path = "meta-llama/Llama-3.1-8B-Instruct"
     print("Using mistral to profile")
     # print("Testing latency, make sure you are using llama3.1 model")
     
@@ -42,7 +43,7 @@ def main():
     config.pp_size = 1
     config.device = torch.device("cuda:0")
     
-    config.max_seq_len = 32768
+    config.max_seq_len = 128 * 1024
     config.cache_block_size = 128
     config.global_cache_size = 4096
     config.cache_topk = config.global_cache_size // config.cache_block_size
@@ -54,9 +55,9 @@ def main():
         initialize_objects(config, model=model_path)
     
     tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast = True, config = config)
-    model = VQMistralForCausalLM.from_pretrained(model_path, config=config, trust_remote_code=True)
+    # model = VQMistralForCausalLM.from_pretrained(model_path, config=config, trust_remote_code=True)
     # tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast = True, config = config)
-    # model = VQLlama31ForCausalLM.from_pretrained(model_path, config=config, trust_remote_code=True)
+    model = VQLlama31ForCausalLM.from_pretrained(model_path, config=config, trust_remote_code=True)
     model = model.half().eval()
     print("We are loading model", model_path)
 
@@ -72,7 +73,7 @@ def main():
     for idx in range(4):
         if idx == 3:
             torch.cuda.cudart().cudaProfilerStart()
-        for seqlen in tqdm.tqdm([4000, 8000, 12000, 16000, 20000, 24000]):
+        for seqlen in tqdm.tqdm([128 * 1024]):
             begin = time.perf_counter()
             output = model.generate(
                         input_ids=input_.input_ids[:, :seqlen],
