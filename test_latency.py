@@ -31,7 +31,7 @@ def main():
     config.sink_size = 32
     config.compressor = "pq_search"
     config.n_subvec_per_head = 2
-    config.n_subbits = 6
+    config.n_subbits = 8
     os.environ["SUBVEC"] = f"{config.n_subvec_per_head}"
     os.environ["SUBBITS"] = f"{config.n_subbits}"
     os.environ["MODE"] = "off"
@@ -73,7 +73,7 @@ def main():
     for idx in range(4):
         if idx == 3:
             torch.cuda.cudart().cudaProfilerStart()
-        for seqlen in tqdm.tqdm([128 * 1024]):
+        for seqlen in tqdm.tqdm([8 * 1024, 16 * 1024, 32 * 1024, 64 * 1024, 128000]):
             begin = time.perf_counter()
             output = model.generate(
                         input_ids=input_.input_ids[:, :seqlen],

@@ -327,7 +327,7 @@ class PqBasedSearchCompressor(RetrievalBasedCompressor):
             if self.layer_idx == 0:
                 logger.info(f"{recall},{recall_mean},{recall_var}")
 
-        final_k_gpu, final_v_gpu = cache_managers[self.rank].fetch_and_concat_kv_w_cache(topk_indices.squeeze(2).squeeze(0), self.layer_idx)
+        final_k_gpu, final_v_gpu = cache_managers[self.rank].fetch_and_concat_kv_wo_cache(topk_indices.squeeze(2).squeeze(0), self.layer_idx)
 
         assert final_k_gpu.shape[-2] == self.sink_size + self.recent_size + self.topk_size + 1, f"{final_k_gpu.shape[-2]},{self.sink_size + self.recent_size + self.topk_size + 1}"
         final_k_gpu[:,:,-1:,:].copy_(k, non_blocking=True)
