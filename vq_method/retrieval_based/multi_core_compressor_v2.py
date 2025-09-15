@@ -166,11 +166,14 @@ def compute_kmeans_worker(
                 km = KMeans(
                         n_clusters = cent_cnt,
                         n_init=1,
-                        init=xb_array[init_cent_idx], 
+                        #init=xb_array[init_cent_idx], 
+                        # init='random',
+                        init='k-means++',
                         tol = 0.0001,
                         # copy_x=True,
                         verbose=False,
-                        max_iter=max_iter,
+                        # max_iter=max_iter,
+                        max_iter=300,
                         random_state=0,
                         algorithm="lloyd"
                 )   
@@ -414,6 +417,7 @@ class MultiCoreCompressor_v2:
             max_iter = int((gpu_compute_time - kmeans_base) / kmeans_per_round  +  3) 
             max_iter = max(max_iter, 3)
             max_iter = min(max_iter, 300)
+            #max_iter = 25
             if layer_idx == 0:
                 logger.info(f"multi core压缩器，max_iter:{max_iter}, base:{kmeans_base}, per_iter:{kmeans_per_round}, gpu_perlayer: {gpu_compute_time}") 
         else:

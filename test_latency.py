@@ -70,8 +70,8 @@ def main():
         end_event = torch.cuda.Event(enable_timing=True)
 
     gen_max_token = 30
-    for idx in range(4):
-        if idx == 3:
+    for idx in range(2):
+        if idx == 1:
             torch.cuda.cudart().cudaProfilerStart()
         for seqlen in tqdm.tqdm([128 * 1024]):
             begin = time.perf_counter()
