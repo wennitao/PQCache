@@ -166,14 +166,14 @@ def compute_kmeans_worker(
                 km = KMeans(
                         n_clusters = cent_cnt,
                         n_init=1,
-                        #init=xb_array[init_cent_idx], 
-                        # init='random',
-                        init='k-means++',
+                        init=xb_array[init_cent_idx], 
+                        #init='random',
+                        #init='k-means++',
                         tol = 0.0001,
                         # copy_x=True,
                         verbose=False,
-                        # max_iter=max_iter,
-                        max_iter=300,
+                        max_iter=max_iter,
+                        # max_iter=300,
                         random_state=0,
                         algorithm="lloyd"
                 )   
